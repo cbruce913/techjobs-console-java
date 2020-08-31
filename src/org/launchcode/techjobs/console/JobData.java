@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -62,7 +60,7 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -76,7 +74,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -84,6 +82,31 @@ public class JobData {
         return jobs;
     }
 
+    public static ArrayList<HashMap<String, String>> findByValue(String anyRow) {
+                                                              /*(search term)*/
+        // load data, if not already loaded
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> job : allJobs) {
+
+            for (Map.Entry<String, String> column: job.entrySet()) {
+                String theValue = column.getValue();
+
+                if (jobs.contains(job)) {
+                    jobs = jobs;
+                } else if (theValue.toLowerCase().contains(anyRow.toLowerCase())) {
+                    jobs.add(job);
+                }
+
+            }
+
+        }
+
+        return jobs;
+
+    }
     /**
      * Read in data from a CSV file and store it in a list
      */
@@ -125,4 +148,4 @@ public class JobData {
         }
     }
 
-}
+    }
